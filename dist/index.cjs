@@ -1,12 +1,15 @@
-'use strict';
+"use strict";
 
-Object.defineProperties(exports, { __esModule: { value: true }, [Symbol.toStringTag]: { value: 'Module' } });
+Object.defineProperties(exports, {
+  __esModule: { value: true },
+  [Symbol.toStringTag]: { value: "Module" },
+});
 
-const node_crypto = require('node:crypto');
-const fse = require('fs-extra');
-const node_os = require('node:os');
-const path = require('node:path');
-const axios = require('axios');
+const node_crypto = require("node:crypto");
+const fse = require("fs-extra");
+const node_os = require("node:os");
+const path = require("node:path");
+const axios = require("axios");
 
 class FileCache {
   #cacheFolder;
@@ -40,9 +43,11 @@ class FileCache {
   }
 }
 function isHttpVirtualProtocol(id) {
-  return id?.startsWith("virtual:http://") || id?.startsWith("virtual:https://");
+  return (
+    id?.startsWith("virtual:http://") || id?.startsWith("virtual:https://")
+  );
 }
-const cacheMemory =  new Map();
+const cacheMemory = new Map();
 function remoteToLocal(options = {}) {
   const {
     cache = cacheMemory,
@@ -50,11 +55,12 @@ function remoteToLocal(options = {}) {
       const { data } = await axios.get(urlToFetch, {
         headers: {
           Accept: "application/javascript",
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
-        }
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        },
       });
       return data;
-    }
+    },
   } = options;
   function resolveId(id, importer) {
     if (importer?.startsWith("http://") || importer?.startsWith("https://")) {
@@ -68,7 +74,10 @@ function remoteToLocal(options = {}) {
     }
     if (importer && isHttpVirtualProtocol(importer)) {
       const baseUrl = importer.replace("virtual:", "");
-      if ((id.startsWith("/node/") || id.startsWith("/avsc@")) && id.endsWith(".mjs")) {
+      if (
+        (id.startsWith("/node/") || id.startsWith("/avsc@")) &&
+        id.endsWith(".mjs")
+      ) {
         const nodeModuleUrl = new URL(id, baseUrl);
         return "virtual:" + nodeModuleUrl.href;
       }
@@ -91,27 +100,35 @@ function remoteToLocal(options = {}) {
     enforce: "pre",
     name: "virtual-http-resolve",
     resolveId(id, importer) {
-      if (importer?.startsWith("virtual:https:/")) ;
-      if (id.startsWith("virtual:https:/")) ;
+      if (importer?.startsWith("virtual:https:/"));
+      if (id.startsWith("virtual:https:/"));
       if (id.startsWith("virtual:https:/")) {
-        id = id.replaceAll("virtual:https:/", "virtual:https://").replaceAll("virtual:https:///", "virtual:https://");
+        id = id
+          .replaceAll("virtual:https:/", "virtual:https://")
+          .replaceAll("virtual:https:///", "virtual:https://");
       }
       if (importer?.startsWith("virtual:https:/")) {
-        importer = importer?.replaceAll("virtual:https:/", "virtual:https://").replaceAll("virtual:https:///", "virtual:https://");
+        importer = importer
+          ?.replaceAll("virtual:https:/", "virtual:https://")
+          .replaceAll("virtual:https:///", "virtual:https://");
       }
       const result = resolveId(id, importer);
       if (result) {
         if (result.startsWith("virtual:https:/")) {
-          return result.replaceAll("virtual:https:/", "virtual:https://").replaceAll("virtual:https:///", "virtual:https://");
+          return result
+            .replaceAll("virtual:https:/", "virtual:https://")
+            .replaceAll("virtual:https:///", "virtual:https://");
         }
         return result;
       }
       return null;
     },
     async load(id) {
-      if (id.startsWith("virtual:https:/")) ;
+      if (id.startsWith("virtual:https:/"));
       if (id.startsWith("virtual:https:/")) {
-        id = id.replaceAll("virtual:https:/", "virtual:https://").replaceAll("virtual:https:///", "virtual:https://");
+        id = id
+          .replaceAll("virtual:https:/", "virtual:https://")
+          .replaceAll("virtual:https:///", "virtual:https://");
       }
       if (id.startsWith("http://") || id.startsWith("https://")) {
         return null;
@@ -129,8 +146,9 @@ function remoteToLocal(options = {}) {
           const { data } = await axios.get(urlToFetch, {
             headers: {
               Accept: "application/javascript",
-              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
-            }
+              "User-Agent":
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+            },
           });
           processedData = data;
         }
@@ -150,20 +168,18 @@ function remoteToLocal(options = {}) {
                 }
                 processedData = processedData.replace(
                   /var h=/g,
-                  `var h_${moduleName}=`
+                  `var h_${moduleName}=`,
                 );
                 if (!processedData) {
-                  throw new Error(
-                    `No data fetched from ${urlToFetch}`
-                  );
+                  throw new Error(`No data fetched from ${urlToFetch}`);
                 }
                 processedData = processedData.replace(
                   /function h\(/g,
-                  `function h_${moduleName}(`
+                  `function h_${moduleName}(`,
                 );
                 processedData = processedData.replace(
                   /,h=/g,
-                  `,h_${moduleName}=`
+                  `,h_${moduleName}=`,
                 );
               }
             }
@@ -175,10 +191,10 @@ function remoteToLocal(options = {}) {
         throw new Error(
           `Remote module load failed: ${urlToFetch}
 ` + String(error),
-          { cause: error }
+          { cause: error },
         );
       }
-    }
+    },
   };
 }
 

@@ -13,10 +13,10 @@ export default defineConfig({
       name: "VirtualHttpResolve",
       fileName: (format) => {
         // ES format outputs to .mjs, CommonJS format outputs to .js
-        if (format === 'es') {
-          return 'index.mjs'
+        if (format === "es") {
+          return "index.mjs";
         } else {
-          return 'index.js'
+          return "index.cjs";
         }
       },
       formats: ["es", "cjs"],
@@ -38,7 +38,7 @@ export default defineConfig({
         "node:path",
       ],
       output: {
-        "exports": "named",
+        exports: "named",
         globals: {
           vite: "vite",
           axios: "axios",

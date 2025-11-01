@@ -1,22 +1,24 @@
 {
   "name": "@masx200/vite-plugin-virtual-http-resolve",
   "version": "1.0.1",
-"pravite":false,
+  "pravite": false,
   "description": "A Vite plugin that resolves remote HTTP/HTTPS modules to virtual modules with caching support",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "./src/index.ts",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
+      "require": "./dist/index.cjs",
       "types": "./src/index.ts"
     }
   },
   "files": [
-    "dist","src"
+    "dist",
+    "src"
   ],
   "scripts": {
+    "format": "prettier --write .",
     "build": "vite build",
     "dev": "vite build --watch",
     "prepublishOnly": "npm run build"
@@ -42,7 +44,8 @@
   },
   "dependencies": {
     "axios": "^1.6.0",
-    "fs-extra": "^11.0.0"
+    "fs-extra": "^11.0.0",
+    "prettier": "^3.6.2"
   },
   "peerDependencies": {
     "vite": "^4.0.0 || ^5.0.0"

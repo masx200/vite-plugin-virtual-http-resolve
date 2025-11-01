@@ -78,10 +78,7 @@ export default function remoteToLocal(
   } = options;
 
   function resolveId(id: string, importer?: string) {
-    if (
-      importer?.startsWith("http://") ||
-      importer?.startsWith("https://")
-    ) {
+    if (importer?.startsWith("http://") || importer?.startsWith("https://")) {
       return null;
     }
     if (id.startsWith("http://") || id.startsWith("https://")) {
@@ -120,11 +117,7 @@ export default function remoteToLocal(
       }
 
       // Handle any other relative imports
-      if (
-        id.startsWith("./") ||
-        id.startsWith("../") ||
-        id.startsWith("/")
-      ) {
+      if (id.startsWith("./") || id.startsWith("../") || id.startsWith("/")) {
         const resolvedUrl = new URL(id, baseUrl);
         return "virtual:" + resolvedUrl.href;
       }
@@ -215,10 +208,7 @@ export default function remoteToLocal(
               const moduleNameParts = modulePart.split(".mjs");
               if (moduleNameParts.length > 0) {
                 let moduleName = moduleNameParts[0];
-                if (
-                  moduleName &&
-                  moduleName.includes("chunk-")
-                ) {
+                if (moduleName && moduleName.includes("chunk-")) {
                   moduleName = "chunk";
                 }
 
@@ -227,9 +217,7 @@ export default function remoteToLocal(
                   `var h_${moduleName}=`,
                 );
                 if (!processedData) {
-                  throw new Error(
-                    `No data fetched from ${urlToFetch}`,
-                  );
+                  throw new Error(`No data fetched from ${urlToFetch}`);
                 }
                 processedData = processedData.replace(
                   /function h\(/g,
@@ -260,8 +248,7 @@ export default function remoteToLocal(
         //     error,
         // );
         throw new Error(
-          `Remote module load failed: ${urlToFetch}\n` +
-            String(error),
+          `Remote module load failed: ${urlToFetch}\n` + String(error),
           { cause: error },
         );
       }
