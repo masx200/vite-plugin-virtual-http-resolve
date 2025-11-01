@@ -1,12 +1,8 @@
-'use strict';
-
-Object.defineProperties(exports, { __esModule: { value: true }, [Symbol.toStringTag]: { value: 'Module' } });
-
-const node_crypto = require('node:crypto');
-const fse = require('fs-extra');
-const node_os = require('node:os');
-const path = require('node:path');
-const axios = require('axios');
+import { createHash } from 'node:crypto';
+import fse from 'fs-extra';
+import { homedir } from 'node:os';
+import path from 'node:path';
+import axios from 'axios';
 
 class FileCache {
   #cacheFolder;
@@ -15,12 +11,12 @@ class FileCache {
     return fse.exists(filepath);
   }
   constructor(cacheFolder) {
-    this.#cacheFolder = path.join(node_os.homedir(), "cache", "fetch");
+    this.#cacheFolder = path.join(homedir(), "cache", "fetch");
     if (cacheFolder) this.#cacheFolder = cacheFolder;
     fse.ensureDirSync(this.#cacheFolder);
   }
   #getCachePath(key) {
-    const hash = node_crypto.createHash("sha512");
+    const hash = createHash("sha512");
     hash.update(key);
     const filename = hash.digest("base64");
     return path.join(this.#cacheFolder, filename);
@@ -182,5 +178,4 @@ function remoteToLocal(options = {}) {
   };
 }
 
-exports.FileCache = FileCache;
-exports.default = remoteToLocal;
+export { FileCache, remoteToLocal as default };

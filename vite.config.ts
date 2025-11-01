@@ -11,7 +11,14 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, "src/index.ts"),
       name: "VirtualHttpResolve",
-      fileName: "index",
+      fileName: (format) => {
+        // ES format outputs to .mjs, CommonJS format outputs to .js
+        if (format === 'es') {
+          return 'index.mjs'
+        } else {
+          return 'index.js'
+        }
+      },
       formats: ["es", "cjs"],
     },
     rollupOptions: {

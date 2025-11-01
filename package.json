@@ -1,6 +1,7 @@
 {
   "name": "@masx200/vite-plugin-virtual-http-resolve",
-  "version": "1.0.0",
+  "version": "1.0.1",
+"pravite":false,
   "description": "A Vite plugin that resolves remote HTTP/HTTPS modules to virtual modules with caching support",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -13,7 +14,7 @@
     }
   },
   "files": [
-    "dist"
+    "dist","src"
   ],
   "scripts": {
     "build": "vite build",
